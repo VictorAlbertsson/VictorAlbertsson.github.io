@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Funktionell Programmering</title>
+<meta name="author" content="(Victor Albertsson)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="./reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="./reveal.js/dist/theme/moon.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = './reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Funktionell Programmering</h1><h2 class="author">Victor Albertsson</h2><p class="date">Created: 2020-11-02 Mon 00:45</p>
+</section>
+<section>
+<section id="slide-orgd9c46c2">
+<h2 id="orgd9c46c2">Problem med imperativ programmering</h2>
+<ul>
+<li>Skapar svårfångade buggar</li>
+<li>Svårt att optimera
+<ul>
+<li>Samtidighet</li>
+<li>Parallelism</li>
+
+</ul></li>
+<li>Problem med minnessäkerhet</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org207d9d5">
+<h2 id="org207d9d5">Grundläggande principer</h2>
+<div class="outline-text-2" id="text-org207d9d5">
+</div>
+</section>
+<section id="slide-org1c20fcc">
+<h3 id="org1c20fcc">Oföränderlighet</h3>
+<ul>
+<li>Variabler och funktioner kan endast initieras (!)</li>
+
+</ul>
+</section>
+<section id="slide-org239876e">
+<h3 id="org239876e">Funktioner hela vägen ner</h3>
+<ul>
+<li>Program ska delas in i många små funktioner</li>
+<li>Funktioner konstrueras från mindre funktioner utan att deras betydelse ändras</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-racket"><code trim><span style="color: #c7c7c7; font-weight: bold;">#lang</span> <span style="color: #00eaea;">racket</span>
+(<span style="color: #c7c7c7; font-weight: bold;">require</span> racket/function)
+((<span style="color: #9dff9d;">curry</span> <span style="color: #9dff9d;">+</span> <span style="color: #2e8b57;">10</span>) <span style="color: #2e8b57;">20</span>) <span style="color: #005353;">; </span><span style="color: #005353;">= (+ 10 20)</span>
+<span style="color: #005353;">;; </span><span style="color: #005353;">30</span>
+
+(<span style="color: #9dff9d;">map</span> (<span style="color: #9dff9d;">curry</span> <span style="color: #9dff9d;">+</span> <span style="color: #2e8b57;">10</span>) (<span style="color: #9dff9d;">list</span> <span style="color: #2e8b57;">20</span> <span style="color: #2e8b57;">40</span> <span style="color: #2e8b57;">60</span>))
+<span style="color: #005353;">;; </span><span style="color: #005353;">'(30 50 70)</span>
+
+((<span style="color: #9dff9d;">compose</span> <span style="color: #9dff9d;">sqrt</span> <span style="color: #9dff9d;">+</span>) <span style="color: #2e8b57;">16</span> <span style="color: #2e8b57;">9</span>)
+<span style="color: #005353;">;; </span><span style="color: #005353;">5</span>
+</code></pre>
+</div>
+</section>
+<section id="slide-org9bb5802">
+<h3 id="org9bb5802">Induktiva typer</h3>
+<ul>
+<li>Rekursiva funktioner blir ett naturlig verktyg</li>
+<li>Även ‘pattern matching’ blir möjligt</li>
+
+</ul>
+<div class="org-src-container">
+
+<pre  class="src src-racket"><code trim><span style="color: #c7c7c7; font-weight: bold;">#lang</span> <span style="color: #00eaea;">typed/racket</span>
+(<span style="color: #9dff9d;">define-type</span> (<span style="color: #9dff9d;">List</span> A) (<span style="color: #e4a6ff;">Rec</span> <span style="color: #e4a6ff;">List</span> (<span style="color: #e4a6ff;">Pair</span> A (<span style="color: #e4a6ff;">U</span> <span style="color: #e4a6ff;">List</span> <span style="color: #e4a6ff;">Null</span>))))
+<span style="color: #005353;">;; </span><span style="color: #005353;">&#8216;Rec&#8217; skapar en anonym datatyp</span>
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orge4fdbff">
+<h2 id="orge4fdbff">Konsekvenser</h2>
+<div class="outline-text-2" id="text-orge4fdbff">
+</div>
+</section>
+<section id="slide-orgab4beeb">
+<h3 id="orgab4beeb">Matematiska resonemang</h3>
+<ul>
+<li><i>"If it is to be effective as a tool of thought, a notation must allow convenient expression not only of notions arising directly from a problem, but also of those arising in subsequent analysis, generalization, and specialization."</i> &#x2013; Kenneth E. Iverson</li>
+<li>Typer som propositioner och funktioner av typer som bevis</li>
+<li>Verifiering av kodsäkerhet blir möjligt</li>
+
+</ul>
+</section>
+<section id="slide-org882bcdf">
+<h3 id="org882bcdf">Starkare optimering</h3>
+<ul>
+<li>Samtidighet (Erlang)</li>
+<li>Parallelism (APL)</li>
+
+</ul>
+</section>
+<section id="slide-org97ae7b6">
+<h3 id="org97ae7b6">Modularitet</h3>
+<ul>
+<li>Eliminering av kopplingar mellan orelaterad kod</li>
+<li>Alla värden som en funktion kan anta måste vara väldefinierade</li>
+
+</ul>
+</section>
+<section id="slide-org027acd4">
+<h3 id="org027acd4">Rekursion</h3>
+<ul>
+<li>Kan skapa eleganta lösningar</li>
+<li>Kräver mer kognitiv ansträngning i tidskritiska applikationer</li>
+<li>Effektiv rekursion kräver att språket stödjer vissa optimeringsstrategier (tail-call elimination)</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org245ca64">
+<h2 id="org245ca64">Deklarativ programmering</h2>
+<ul>
+<li><b>VAD</b> som ska göras utan <b>HUR</b> det ska utföras</li>
+
+</ul>
+</section>
+<section id="slide-org1943864">
+<h3 id="org1943864">Prolog (<a href="https://www.youtube.com/channel/UCFFeNyzCEQDS4KCecugmotg">The Power of Prolog</a>)</h3>
+<div class="org-src-container">
+
+<pre  class="src src-prolog"><code trim>:- use_module(library(reif)).
+
+<span style="color: #9dff9d;">list_without</span>(<span style="color: #c7c7c7; font-weight: bold;">[]</span>, <span style="color: #00eaea;">_</span>, <span style="color: #c7c7c7; font-weight: bold;">[]</span>).
+<span style="color: #9dff9d;">list_without</span>(<span style="color: #c7c7c7; font-weight: bold;">[</span><span style="color: #00eaea;">X</span><span style="color: #c7c7c7; font-weight: bold;">|</span><span style="color: #00eaea;">Xs</span><span style="color: #c7c7c7; font-weight: bold;">]</span>, <span style="color: #00eaea;">E</span>, <span style="color: #00eaea;">Ys</span>) :-
+    if_(<span style="color: #00eaea;">X</span>=<span style="color: #00eaea;">E</span>, <span style="color: #00eaea;">Ys</span>=<span style="color: #00eaea;">Ls</span>, <span style="color: #00eaea;">Ys</span>=<span style="color: #c7c7c7; font-weight: bold;">[</span><span style="color: #00eaea;">X</span><span style="color: #c7c7c7; font-weight: bold;">|</span><span style="color: #00eaea;">Ls</span><span style="color: #c7c7c7; font-weight: bold;">]</span>),
+    list_without(<span style="color: #00eaea;">Xs</span>, <span style="color: #00eaea;">E</span>, <span style="color: #00eaea;">Ls</span>).
+</code></pre>
+</div>
+</section>
+<section id="slide-orgcec0575">
+<h3 id="orgcec0575">Den deklarativa hierarkin</h3>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Endast reversibla funktioner</td>
+<td class="org-left">Monoton</td>
+</tr>
+
+<tr>
+<td class="org-left">Inga mutationer</td>
+<td class="org-left">Icke-monoton, Rent funktionell</td>
+</tr>
+
+<tr>
+<td class="org-left">Begränsade mutationer</td>
+<td class="org-left">Monadisk, Substrukturell et al</td>
+</tr>
+
+<tr>
+<td class="org-left">Obegränsade mutationer</td>
+<td class="org-left">Imperativ</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section>
+<section id="slide-org7a9fc46">
+<h2 id="org7a9fc46">Fin</h2>
+</section>
+</section>
+</div>
+</div>
+<script src="./reveal.js/dist/reveal.js"></script>
+<script src="./reveal.js/plugin/markdown/markdown.js"></script>
+<script src="./reveal.js/plugin/zoom/zoom.js"></script>
+<script src="./reveal.js/plugin/notes/notes.js"></script>
+
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+plugins: [RevealMarkdown,RevealZoom,RevealNotes],
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+]
+});
+</script>
+</body>
+</html>
