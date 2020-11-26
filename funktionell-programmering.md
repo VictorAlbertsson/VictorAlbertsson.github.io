@@ -73,7 +73,7 @@ author:
 
 ## Matematiska resonemang
 
-- *"If it is to be effective as a tool of thought, a notation must allow convenient expression not only of notions arising directly from a problem, but also of those arising in subsequent analysis, generalization, and specialization."* -- Kenneth E. Iverson
+- _"If it is to be effective as a tool of thought, a notation must allow convenient expression not only of notions arising directly from a problem, but also of those arising in subsequent analysis, generalization, and specialization."_ -- Kenneth E. Iverson
 - Typer som propositioner och funktioner av typer som bevis
 - Verifiering av kodsäkerhet blir möjligt
 
@@ -124,6 +124,8 @@ list_without([X|Xs], E, Ys) :-
 
 ## Den deklarativa hierarkin
 
+| Egenskaper                   | Namn                              |
+| :--------------------------: | :-------------------------------: |
 | Endast reversibla funktioner | Monoton                           |
 | Inga mutationer              | Icke-monoton, Rent funktionell    |
 | Begränsade mutationer        | Monadisk, Substrukturell et al    |
